@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOSHINO CHURROS｜ホシノチュロス キッチンカー</title>
+  <meta name="description" content="チュロス専門キッチンカー「HOSHINO CHURROS」。外はカリッと、中はもちっと。焼きたてチュロスをお届けします。油を使わないヘルシーな本格チュロス。出店スケジュールはこちら。">
+  <style>
+    /* ===== リセット・変数 ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:    #E8A030;
+      --gold-d:  #C47A10;
+      --brown:   #3D1C02;
+      --brown-m: #6B3A1F;
+      --caramel: #C9873A;
+      --cream:   #FFF8F0;
+      --cream-d: #F5EAD6;
+      --gray:    #6B5240;
+      --white:   #ffffff;
+      --shadow:  0 4px 24px rgba(61,28,2,.12);
+      --radius:  16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.7;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== ヘッダー ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,248,240,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,135,58,.2);
+      transition: box-shadow .3s;
+    }
+    .header.scrolled { box-shadow: var(--shadow); }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--brown);
+    }
+    .logo span { color: var(--gold); }
+    .header-logo-img {
+      height: 48px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+    .nav { display: flex; gap: 28px; align-items: center; }
+    .nav a {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--gray);
+      transition: color .2s;
+    }
+    .nav a:hover { color: var(--gold-d); }
+    .nav .btn-header {
+      background: var(--gold);
+      color: var(--white);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: .85rem;
+      font-weight: 700;
+      transition: background .2s, transform .2s;
+    }
+    .nav .btn-header:hover { background: var(--gold-d); transform: translateY(-1px); }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--brown);
+      border-radius: 2px;
+      transition: .3s;
+    }
+
+    /* ===== モバイルメニュー ===== */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0; bottom: 0;
+      background: var(--cream);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    /* ===== ヒーロー ===== */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      overflow: hidden;
+      background: #3D1C02;
+    }
+    /* スライドショー背景 */
+    .hero-bg-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    .hero-bg-slide.active { opacity: 1; }
+    .hero-bg-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* 暗めオーバーレイ（テキスト可読性確保） */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(61,28,2,.72) 0%, rgba(61,28,2,.55) 50%, rgba(201,135,58,.45) 100%);
+      z-index: 1;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 720px; }
+    .scroll-hint { z-index: 2; }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(232,160,48,.25);
+      border: 1px solid rgba(232,160,48,.5);
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: .02em;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: clamp(.9rem, 2vw, 1.1rem);
+      color: rgba(255,255,255,.75);
+      margin-bottom: 40px;
+      line-height: 1.9;
+    }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: .95rem;
+      cursor: pointer;
+      border: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(232,160,48,.4);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 32px rgba(232,160,48,.5); }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,.5);
+    }
+    .btn-outline:hover { border-color: var(--white); }
+
+    /* 矢印アニメーション */
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: rgba(255,255,255,.4);
+      font-size: .75rem;
+      letter-spacing: 2px;
+    }
+    .scroll-hint svg { animation: bounce 2s infinite; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* ===== セクション共通 ===== */
+    .section { padding: 80px 24px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--gold-d);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--gray);
+      font-size: .95rem;
+      margin-bottom: 52px;
+    }
+
+    /* ===== 特徴バナー ===== */
+    .features { background: var(--brown); padding: 40px 24px; }
+    .features-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,.1);
+    }
+    .feature-item {
+      background: var(--brown);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .feature-icon { font-size: 2rem; margin-bottom: 12px; }
+    .feature-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .feature-desc { font-size: .82rem; color: rgba(255,255,255,.65); line-height: 1.7; }
+
+    /* ===== メニュー ===== */
+    .menu-section { background: var(--cream); }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .menu-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .menu-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(61,28,2,.15); }
+    .menu-img {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+    .menu-img .menu-emoji {
+      position: relative;
+      z-index: 1;
+    }
+    .menu-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      letter-spacing: 1px;
+    }
+    .menu-body { padding: 20px; }
+    .menu-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .menu-desc { font-size: .85rem; color: var(--gray); line-height: 1.7; margin-bottom: 14px; }
+    .menu-price {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--gold-d);
+    }
+    .menu-price small { font-size: .75rem; color: var(--gray); font-weight: 400; }
+    .allergen-row {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cream-d);
+    }
+    .allergen-label {
+      font-size: .72rem;
+      color: var(--gray);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .allergen-icons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .allergen-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .allergen-item img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+    .allergen-item span {
+      font-size: .65rem;
+      color: var(--gray);
+      font-weight: 600;
+    }
+    .allergen-ice {
+      margin-top: 10px;
+    }
+    .allergen-ice-title {
+      font-size: .72rem;
+      color: var(--gray);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .allergen-ice-flavor {
+      margin-bottom: 8px;
+    }
+    .allergen-ice-flavor-name {
+      font-size: .68rem;
+      color: var(--brown-m);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    /* ===== 出店スケジュール ===== */
+    .schedule-section { background: var(--cream-d); }
+    .schedule-table-wrap { overflow-x: auto; }
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .schedule-table thead th {
+      background: var(--brown);
+      color: var(--white);
+      padding: 14px 20px;
+      font-size: .85rem;
+      font-weight: 700;
+      text-align: left;
+      letter-spacing: 1px;
+    }
+    .schedule-table tbody tr { border-bottom: 1px solid var(--cream-d); }
+    .schedule-table tbody tr:last-child { border-bottom: none; }
+    .schedule-table tbody tr:hover { background: var(--cream); }
+    .schedule-table td { padding: 16px 20px; font-size: .9rem; }
+    .schedule-date { font-weight: 700; color: var(--brown); }
+    .schedule-place { font-weight: 600; }
+    .schedule-time { color: var(--gray); font-size: .85rem; }
+    .tag-event {
+      display: inline-block;
+      background: rgba(232,160,48,.15);
+      color: var(--gold-d);
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+    .schedule-notice {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: rgba(232,160,48,.1);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      font-size: .85rem;
+      color: var(--gray);
+    }
+    .schedule-notice strong { color: var(--gold-d); }
+
+    /* ===== 出店実績 ===== */
+    .achievement-section { background: var(--cream-d); }
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .achievement-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .achievement-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(61,28,2,.13); }
+    .achievement-name {
+      font-size: .95rem;
+      font-weight: 800;
+      color: var(--brown);
+      margin-bottom: 14px;
+      line-height: 1.4;
+      border-bottom: 2px solid var(--cream-d);
+      padding-bottom: 10px;
+    }
+    .achievement-info { display: flex; flex-direction: column; gap: 8px; }
+    .achievement-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .85rem;
+    }
+    .achievement-row-label {
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--caramel);
+      padding: 2px 8px;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+    .achievement-row-val { color: var(--gray); font-weight: 600; }
+    .achievement-sold-val {
+      color: var(--gold-d);
+      font-weight: 800;
+      font-size: 1rem;
+    }
+    @media (max-width: 1024px) {
+      .achievement-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .achievement-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== ストーリー ===== */
+    .story-section { background: var(--white); }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .story-visual {
+      position: relative;
+    }
+    .story-video-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(61,28,2,.2);
+    }
+    .story-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .story-text { }
+    .story-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--gold-d);
+      margin-bottom: 10px;
+    }
+    .story-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .story-body {
+      color: var(--gray);
+      line-height: 1.9;
+      font-size: .95rem;
+      margin-bottom: 28px;
+    }
+    .story-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+    .story-tag {
+      background: var(--cream-d);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--brown-m);
+    }
+
+    /* ===== SNS ===== */
+    .sns-section { background: var(--cream-d); text-align: center; }
+    .sns-desc { color: var(--gray); margin-bottom: 32px; font-size: .95rem; }
+    .sns-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
+    .sns-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .sns-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,.12); }
+    .sns-btn-ig {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: var(--white);
+    }
+    .sns-btn-x {
+      background: #000;
+      color: var(--white);
+    }
+
+    /* ===== お問い合わせ ===== */
+    .contact-section { background: var(--brown); text-align: center; padding: 80px 24px; }
+    .contact-title { color: var(--white); font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 900; margin-bottom: 14px; }
+    .contact-sub { color: rgba(255,255,255,.65); margin-bottom: 40px; font-size: .95rem; }
+    .contact-cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .contact-card {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      flex: 1;
+      min-width: 200px;
+      transition: background .2s;
+    }
+    .contact-card:hover { background: rgba(255,255,255,.12); }
+    .contact-card-icon { font-size: 2rem; margin-bottom: 10px; }
+    .contact-card-label { font-size: .78rem; letter-spacing: 2px; color: var(--gold); font-weight: 700; margin-bottom: 6px; }
+    .contact-card-val { font-size: .95rem; font-weight: 600; color: var(--white); }
+    a.contact-card { display: block; text-decoration: none; cursor: pointer; }
+
+    /* ===== フッター ===== */
+    footer {
+      background: #E8D5B0;
+      color: var(--brown-m);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: .82rem;
+    }
+    footer .footer-logo { margin-bottom: 12px; }
+    footer .footer-logo img { height: 48px; width: auto; margin: 0 auto; }
+    footer .footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 12px 0 20px; }
+    footer .footer-links a { color: var(--brown-m); font-size: .8rem; transition: color .2s; }
+    footer .footer-links a:hover { color: var(--gold-d); }
+
+    /* ===== レスポンシブ ===== */
+    @media (max-width: 1024px) {
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav { display: none; }
+      .hamburger { display: flex; }
+      .features-inner { grid-template-columns: repeat(2, 1fr); gap: 0; }
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .story-sub-img { right: -12px; bottom: -12px; }
+    }
+    @media (max-width: 480px) {
+      .section { padding: 60px 20px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .features-inner { grid-template-columns: 1fr; }
+    }
+
+    /* ===== フェードイン ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== ヘッダー ========== -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#">
+      <img src="images/logo.png" alt="HOSHINO CHURROS" class="header-logo-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div class="logo" style="display:none;">HOSHINO <span>CHURROS</span></div>
+    </a>
+    <nav class="nav">
+      <a href="#menu">メニュー</a>
+      <a href="#schedule">出店情報</a>
+      <a href="#story">こだわり</a>
+      <a href="#contact">お問い合わせ</a>
+      <a href="#schedule" class="btn-header">出店スケジュールを見る</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- モバイルメニュー -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#menu" onclick="closeMobileMenu()">メニュー</a>
+  <a href="#schedule" onclick="closeMobileMenu()">出店情報</a>
+  <a href="#story" onclick="closeMobileMenu()">こだわり</a>
+  <a href="#contact" onclick="closeMobileMenu()">お問い合わせ</a>
+</div>
+
+<!-- ========== ヒーロー ========== -->
+<section class="hero">
+
+  <!-- 背景スライドショー -->
+  <div class="hero-bg-slide active">
+    <img src="images/hero/slide1.jpg" alt="">
+  </div>
+  <div class="hero-bg-slide">
+    <img src="images/hero/slide2.jpg" alt="">
+  </div>
+  <div class="hero-bg-slide">
+    <img src="images/hero/slide3.jpg" alt="">
+  </div>
+  <div class="hero-bg-slide">
+    <img src="images/hero/slide4.jpg" alt="">
+  </div>
+  <div class="hero-bg-slide">
+    <img src="images/hero/slide5.jpg" alt="">
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <p class="hero-tag">CHURROS KITCHEN CAR</p>
+    <h1>焼きたて、<em>幸せの一本。</em></h1>
+    <p class="hero-sub">
+      星のチュロスは石川県・能登の美しい星空をイメージして名づけられました。<br>
+      外はカリッと、中はしっと〜りもっち〜りとした本格チュロス。<br>
+      作り置きは一切せず、あなたの目の前で焼き上げます。<br>
+      揚げないからヘルシー。罪悪感なく楽しめる一本です。
+    </p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn btn-primary">メニューを見る</a>
+      <a href="#schedule" class="btn btn-outline">出店情報を確認する</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+      <path d="M8 0v16M2 10l6 8 6-8" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========== 特徴 ========== -->
+<div class="features">
+  <div class="features-inner">
+    <div class="feature-item">
+      <div class="feature-title">焼きたて提供</div>
+      <div class="feature-desc">注文を受けてから焼き上げる、できたてのチュロスをお届けします。</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-title">油不使用でヘルシー</div>
+      <div class="feature-desc">揚げないから余計な油分ゼロ。軽い食感でカロリーも控えめです。</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-title">国内で製造</div>
+      <div class="feature-desc">石川県・能登の工場で製造したチュロスを直送で入荷してます。</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-title">豊富なフレーバー</div>
+      <div class="feature-desc">定番から季節限定まで、バラエティ豊かなラインナップ。</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-title">健康への配慮</div>
+      <div class="feature-desc">グルテン・トランス脂肪酸をできる限り削減</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== メニュー ========== -->
+<section class="section menu-section" id="menu">
+  <div class="section-inner">
+    <p class="section-label fade-in">MENU</p>
+    <h2 class="section-title fade-in">こだわりのメニュー</h2>
+    <p class="section-sub fade-in">すべて注文後に焼き上げた、できたてをご提供します<br><small style="font-size:.82rem;color:var(--gray);">※焼きたてでご用意しますのでご提供までに5〜6分ほどお時間を頂戴いたします。</small></p>
+    <div class="menu-grid">
+
+      <!-- 1. プレーン -->
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#F5DEB3,#E8C87A);">
+          <img src="images/menu/plain.png" alt="プレーンチュロス"
+               onerror="this.style.display='none'">
+
+          <span class="menu-badge">定番人気</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">プレーン</div>
+          <div class="menu-desc">アレンジしやすいプレーン味。毎日のお好みで楽しめる朝食用チュロス。</div>
+          <div class="menu-price">¥400 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. チョコレート -->
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#3D1C02,#6B3A1F);">
+          <img src="images/menu/chocolate.png" alt="チョコレートチュロス"
+               onerror="this.style.display='none'">
+
+          <span class="menu-badge">人気 No.1</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">チョコレート</div>
+          <div class="menu-desc">カカオを練りこんだスイートフレーバー。甘さ控えめビターテイストで、大人にも好まれるチョコレート味。</div>
+          <div class="menu-price">¥400 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. シナモン -->
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#D2691E,#8B4513);">
+          <img src="images/menu/cinnamon.png" alt="シナモンチュロス"
+               onerror="this.style.display='none'" style="transform: scale(1.1);">
+
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">シナモン</div>
+          <div class="menu-desc">こだわりのシナモンフレーバー。ほんのり香ばしくてスイートな味わい。</div>
+          <div class="menu-price">¥400 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ミルクバター -->
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#FFF8DC,#FFE4B5);">
+          <img src="images/menu/milk-butter.png" alt="ミルクバターチュロス"
+               onerror="this.style.display='none'">
+
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">ミルクバター</div>
+          <div class="menu-desc">ふんわりやさしいミルキーフレーバー。甘くてやわらかいミルク味は、気持ちもほっこりやさしくなります。お子様にもおすすめのフレーバーです。</div>
+          <div class="menu-price">¥400 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. チュロス3種セット -->
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#C9873A,#E8A030);">
+          <img src="images/menu/set3.png" alt="チュロス3種セット"
+               onerror="this.style.display='none'" style="object-position: center 30%;">
+
+          <span class="menu-badge">おすすめ</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">チュロス3種セット</div>
+          <div class="menu-desc">3種類のフレーバーが楽しめるお得なセット。食べ比べにも、シェアにも最適。</div>
+          <div class="menu-price">¥900 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. チュロス2種セット -->
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#6B3A1F,#C9873A);">
+          <img src="images/menu/set2.png" alt="チュロス2種セット"
+               onerror="this.style.display='none'" style="object-position: center 30%; transform: scale(1.3);">
+
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">チュロス2種セット</div>
+          <div class="menu-desc">お好きなフレーバーを2種選べるセット。カップルやお友達と一緒に楽しめます。</div>
+          <div class="menu-price">¥700 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. チュロスドリンクセット -->
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#3D1C02,#5C3A1E);">
+          <img src="images/menu/drink-set.png" alt="チュロスドリンクセット"
+               onerror="this.style.display='none'" style="object-position: center 30%;">
+
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">チュロスドリンクセット</div>
+          <div class="menu-desc">お好みのチュロスにドリンクをプラス！</div>
+          <div class="menu-price">¥600 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. アイスチュロス -->
+
+      <div class="menu-card fade-in">
+        <div class="menu-img" style="background: linear-gradient(135deg,#B3D9F5,#7EC8E3);">
+          <img src="images/menu/ice.png" alt="アイスチュロス"
+               onerror="this.style.display='none'" style="transform: scale(1.1);">
+
+          <span class="menu-badge">季節限定</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">アイスチュロス</div>
+          <div class="menu-desc">焼きたてチュロスにバニラアイスをトッピング。温かいと冷たいの絶妙なコントラスト。</div>
+          <div class="menu-price">¥600 <small>（税込）</small></div>
+          <div class="allergen-row">
+            <span class="allergen-label">アレルゲン（チュロス）</span>
+            <div class="allergen-icons">
+              <div class="allergen-item"><img src="images/allergens/wheat.png" alt="小麦"><span>小麦</span></div>
+              <div class="allergen-item"><img src="images/allergens/egg.png" alt="卵"><span>卵</span></div>
+              <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+              <div class="allergen-item"><img src="images/allergens/soy.png" alt="大豆"><span>大豆</span></div>
+            </div>
+            <div class="allergen-ice">
+              <span class="allergen-ice-title">アレルゲン（アイス）</span>
+              <div class="allergen-ice-flavor">
+                <div class="allergen-ice-flavor-name">バニラ</div>
+                <div class="allergen-icons">
+                  <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+                  <div class="allergen-item"><img src="images/allergens/cashew.png" alt="カシューナッツ"><span>カシュー</span></div>
+                  <div class="allergen-item"><img src="images/allergens/walnut.png" alt="くるみ"><span>くるみ</span></div>
+                </div>
+              </div>
+              <div class="allergen-ice-flavor">
+                <div class="allergen-ice-flavor-name">ダブルキャラメル</div>
+                <div class="allergen-icons">
+                  <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+                  <div class="allergen-item"><img src="images/allergens/cashew.png" alt="カシューナッツ"><span>カシュー</span></div>
+                  <div class="allergen-item"><img src="images/allergens/walnut.png" alt="くるみ"><span>くるみ</span></div>
+                  <div class="allergen-item"><img src="images/allergens/almond.png" alt="アーモンド"><span>アーモンド</span></div>
+                </div>
+              </div>
+              <div class="allergen-ice-flavor">
+                <div class="allergen-ice-flavor-name">クッキー＆クリーム</div>
+                <div class="allergen-icons">
+                  <div class="allergen-item"><img src="images/allergens/milk.png" alt="乳"><span>乳</span></div>
+                  <div class="allergen-item"><img src="images/allergens/cashew.png" alt="カシューナッツ"><span>カシュー</span></div>
+                  <div class="allergen-item"><img src="images/allergens/walnut.png" alt="くるみ"><span>くるみ</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== 出店スケジュール ========== -->
+<section class="section schedule-section" id="schedule">
+  <div class="section-inner">
+    <p class="section-label fade-in">SCHEDULE</p>
+    <h2 class="section-title fade-in">出店スケジュール</h2>
+    <p class="section-sub fade-in">最新情報はInstagramでもお知らせしています</p>
+
+    <div class="schedule-table-wrap fade-in">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>場所</th>
+            <th>時間</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body"></tbody>
+      </table>
+    </div>
+
+    <div class="schedule-notice fade-in">
+      <strong>⚠ 最新情報について：</strong>
+      天候・諸事情により出店を中止・変更する場合があります。最新情報は
+      <a href="#" style="color:var(--gold-d);font-weight:700;">Instagram</a> でご確認ください。
+      貸切・イベント出店のご依頼もお気軽にご相談ください。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 出店実績 ========== -->
+<section class="section achievement-section" id="achievements">
+  <div class="section-inner">
+    <p class="section-label fade-in">TRACK RECORD</p>
+    <h2 class="section-title fade-in">出店実績</h2>
+    <p class="section-sub fade-in">これまでのイベント・マルシェへの出店実績です</p>
+    <p class="fade-in" style="text-align:center;margin-bottom:40px;font-size:1.1rem;font-weight:700;color:var(--brown);">
+      累計売上本数<span style="color:#E02020;font-size:2.2rem;font-weight:900;margin:0 4px;">約13,000本</span>！<br>
+      <small style="font-size:.8rem;font-weight:400;color:var(--gray);">※2024年5月〜2026年3月までのイベント及び通常出店時の実績</small>
+    </p>
+    <div class="achievement-grid" id="achievement-grid"></div>
+  </div>
+</section>
+
+<!-- ========== こだわり・ストーリー ========== -->
+<section class="section story-section" id="story">
+  <div class="section-inner">
+    <div class="story-grid">
+      <div class="story-visual fade-in">
+        <div class="story-video-wrap">
+          <video autoplay muted loop playsinline>
+            <source src="videos/story.mov" type="video/quicktime">
+            <source src="videos/story.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="story-text fade-in">
+        <p class="story-label">OUR STORY</p>
+        <h2 class="story-title">「目の前で焼き上げる」<br>それだけを、ずっと。</h2>
+        <p class="story-body">
+          HOSHINO CHURROSは、「焼きたてのおいしさを、もっと身近に」という想いから生まれたキッチンカー専門店です。<br><br>
+          スペインの伝統的なチュロスの製法を大切にしながら、日本人の口に合う独自のレシピを研究し続けてきました。外はサクッと香ばしく、中はもちもちとした食感は、何度食べても飽きません。<br><br>
+          油で揚げないからヘルシーで、胃にもたれない軽さも大きな魅力のひとつ。お客さまの目の前で焼き上げることにこだわり続けているのは、焼きたての瞬間が一番おいしいと信じているから。一本一本、心を込めてお作りします。
+        </p>
+        <div class="story-tags">
+          <span class="story-tag">焼きたて提供</span>
+          <span class="story-tag">油不使用でヘルシー</span>
+          <span class="story-tag">国内製造</span>
+          <span class="story-tag">豊富なフレーバー</span>
+          <span class="story-tag">グルテン削減</span>
+          <span class="story-tag">トランス脂肪酸削減</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SNS ========== -->
+<section class="section sns-section" id="sns">
+  <div class="section-inner">
+    <p class="section-label fade-in">SNS</p>
+    <h2 class="section-title fade-in">フォローしてね</h2>
+    <p class="sns-desc fade-in">最新の出店情報・新メニューはSNSで発信中！</p>
+    <div class="sns-btns fade-in">
+      <a href="https://www.instagram.com/hoshino_churros/" target="_blank" rel="noopener" class="sns-btn sns-btn-ig">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram
+      </a>
+      <a href="https://x.com/hoshino_churros" target="_blank" rel="noopener" class="sns-btn sns-btn-x">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        X (Twitter)
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== お問い合わせ ========== -->
+<section class="contact-section" id="contact">
+  <div class="section-inner" style="max-width:1100px;margin:0 auto;">
+    <h2 class="contact-title fade-in">ご出店依頼・お問い合わせ</h2>
+    <p class="contact-sub fade-in">
+      イベント・マルシェへの出店依頼、企業様向けケータリングなど、<br>
+      お気軽にご相談ください。
+    </p>
+    <div class="fade-in" style="max-width:700px;margin:0 auto 40px;">
+      <img src="images/contact/recruitment.png" alt="出店募集"
+           style="width:100%;border-radius:12px;display:block;"
+           onerror="this.style.display='none'">
+    </div>
+    <div class="contact-cards fade-in">
+      <a href="mailto:kc.okrako@okrako.net" class="contact-card">
+        <div class="contact-card-icon">📩</div>
+        <div class="contact-card-label">MAIL</div>
+        <div class="contact-card-val">メールで問い合わせる</div>
+      </a>
+      <a href="https://www.instagram.com/hoshino_churros/" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-card-icon">📱</div>
+        <div class="contact-card-label">INSTAGRAM DM</div>
+        <div class="contact-card-val">@hoshino_churros</div>
+      </a>
+    </div>
+    <p class="fade-in" style="margin-top:24px;color:rgba(255,255,255,.75);font-size:1.2rem;font-weight:700;">
+      受付時間：09:30 〜 18:30
+    </p>
+    <p class="fade-in" style="margin-top:8px;color:rgba(255,255,255,.6);font-size:.9rem;">
+      対応可能：水曜日〜日曜日　／　定休日：毎週月曜日・火曜日
+    </p>
+  </div>
+</section>
+
+<!-- ========== フッター ========== -->
+<footer>
+  <div class="footer-logo">
+    <img src="images/logo.png" alt="HOSHINO CHURROS"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span style="display:none;font-size:1.1rem;font-weight:900;letter-spacing:2px;color:var(--brown);">HOSHINO CHURROS</span>
+  </div>
+  <div class="footer-links">
+    <a href="#menu">メニュー</a>
+    <a href="#schedule">出店情報</a>
+    <a href="#story">こだわり</a>
+    <a href="#sns">SNS</a>
+    <a href="#contact">お問い合わせ</a>
+  </div>
+  <p>&copy; 2025 株式会社スターシェア All rights reserved.</p>
+</footer>
+
+<script src="js/schedule.js"></script>
+<script src="js/achievements.js"></script>
+<script>
+  // 出店実績自動生成
+  const achievementGrid = document.getElementById('achievement-grid');
+  ACHIEVEMENTS.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'achievement-card fade-in';
+    card.innerHTML = `
+      <div class="achievement-name">${item.name}</div>
+      <div class="achievement-info">
+        <div class="achievement-row">
+          <span class="achievement-row-label">場所</span>
+          <span class="achievement-row-val">${item.place}</span>
+        </div>
+        <div class="achievement-row">
+          <span class="achievement-row-label">開催日</span>
+          <span class="achievement-row-val">${item.date}</span>
+        </div>
+        <div class="achievement-row">
+          <span class="achievement-row-label">売上本数</span>
+          <span class="achievement-sold-val">${item.sold}</span>
+        </div>
+      </div>
+    `;
+    achievementGrid.appendChild(card);
+  });
+
+  // 出店スケジュール自動生成
+  const tbody = document.getElementById('schedule-body');
+  SCHEDULE.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="schedule-date">${item.date}</span></td>
+      <td><span class="schedule-place">${item.place}</span></td>
+      <td><span class="schedule-time">${item.time}</span></td>
+      <td>${item.isEvent ? '<span class="tag-event">イベント</span>' : ''}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // ヒーロー背景スライドショー
+  let heroBgIdx = 0;
+  const heroBgSlides = document.querySelectorAll('.hero-bg-slide');
+  setInterval(() => {
+    heroBgSlides[heroBgIdx].classList.remove('active');
+    heroBgIdx = (heroBgIdx + 1) % heroBgSlides.length;
+    heroBgSlides[heroBgIdx].classList.add('active');
+  }, 4000);
+
+  // スクロールでヘッダーに影
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // ハンバーガーメニュー
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+  }
+
+  // フェードインアニメーション
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
