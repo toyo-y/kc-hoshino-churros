@@ -59,7 +59,7 @@
     }
     .logo span { color: var(--gold); }
     .header-logo-img {
-      height: 48px;
+      height: 64px;
       width: auto;
       display: block;
       object-fit: contain;
@@ -609,7 +609,7 @@
       font-size: .82rem;
     }
     footer .footer-logo { margin-bottom: 12px; }
-    footer .footer-logo img { height: 48px; width: auto; margin: 0 auto; }
+    footer .footer-logo img { height: 64px; width: auto; margin: 0 auto; }
     footer .footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 12px 0 20px; }
     footer .footer-links a { color: var(--brown-m); font-size: .8rem; transition: color .2s; }
     footer .footer-links a:hover { color: var(--gold-d); }
@@ -656,6 +656,7 @@
     <nav class="nav">
       <a href="#menu">メニュー</a>
       <a href="#schedule">出店情報</a>
+      <a href="#achievements">出店実績</a>
       <a href="#story">こだわり</a>
       <a href="#contact">お問い合わせ</a>
       <a href="#schedule" class="btn-header">出店スケジュールを見る</a>
@@ -670,6 +671,7 @@
 <div class="mobile-menu" id="mobile-menu">
   <a href="#menu" onclick="closeMobileMenu()">メニュー</a>
   <a href="#schedule" onclick="closeMobileMenu()">出店情報</a>
+  <a href="#achievements" onclick="closeMobileMenu()">出店実績</a>
   <a href="#story" onclick="closeMobileMenu()">こだわり</a>
   <a href="#contact" onclick="closeMobileMenu()">お問い合わせ</a>
 </div>
@@ -1120,9 +1122,11 @@
 <!-- ========== フッター ========== -->
 <footer>
   <div class="footer-logo">
-    <img src="images/logo.png" alt="HOSHINO CHURROS"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-    <span style="display:none;font-size:1.1rem;font-weight:900;letter-spacing:2px;color:var(--brown);">HOSHINO CHURROS</span>
+    <a href="#">
+      <img src="images/logo.png" alt="HOSHINO CHURROS"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span style="display:none;font-size:1.1rem;font-weight:900;letter-spacing:2px;color:var(--brown);">HOSHINO CHURROS</span>
+    </a>
   </div>
   <div class="footer-links">
     <a href="#menu">メニュー</a>
