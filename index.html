@@ -442,58 +442,6 @@
     }
     .schedule-notice strong { color: var(--gold-d); }
 
-    /* ===== 出店実績 ===== */
-    .achievement-section { background: var(--cream-d); }
-    .achievement-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
-    .achievement-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 24px 20px;
-      box-shadow: var(--shadow);
-      transition: transform .25s, box-shadow .25s;
-    }
-    .achievement-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(61,28,2,.13); }
-    .achievement-name {
-      font-size: .95rem;
-      font-weight: 800;
-      color: var(--brown);
-      margin-bottom: 14px;
-      line-height: 1.4;
-      border-bottom: 2px solid var(--cream-d);
-      padding-bottom: 10px;
-    }
-    .achievement-info { display: flex; flex-direction: column; gap: 8px; }
-    .achievement-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: .85rem;
-    }
-    .achievement-row-label {
-      font-size: .7rem;
-      font-weight: 700;
-      color: var(--white);
-      background: var(--caramel);
-      padding: 2px 8px;
-      border-radius: 50px;
-      white-space: nowrap;
-    }
-    .achievement-row-val { color: var(--gray); font-weight: 600; }
-    .achievement-sold-val {
-      color: var(--gold-d);
-      font-weight: 800;
-      font-size: 1rem;
-    }
-    @media (max-width: 1024px) {
-      .achievement-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 480px) {
-      .achievement-grid { grid-template-columns: 1fr; }
-    }
 
     /* ===== ストーリー ===== */
     .story-section { background: var(--white); }
@@ -656,7 +604,6 @@
     <nav class="nav">
       <a href="#menu">メニュー</a>
       <a href="#schedule">出店情報</a>
-      <a href="#achievements">出店実績</a>
       <a href="#story">こだわり</a>
       <a href="#contact">お問い合わせ</a>
       <a href="#schedule" class="btn-header">出店スケジュールを見る</a>
@@ -671,7 +618,6 @@
 <div class="mobile-menu" id="mobile-menu">
   <a href="#menu" onclick="closeMobileMenu()">メニュー</a>
   <a href="#schedule" onclick="closeMobileMenu()">出店情報</a>
-  <a href="#achievements" onclick="closeMobileMenu()">出店実績</a>
   <a href="#story" onclick="closeMobileMenu()">こだわり</a>
   <a href="#contact" onclick="closeMobileMenu()">お問い合わせ</a>
 </div>
@@ -1004,20 +950,6 @@
   </div>
 </section>
 
-<!-- ========== 出店実績 ========== -->
-<section class="section achievement-section" id="achievements">
-  <div class="section-inner">
-    <p class="section-label fade-in">TRACK RECORD</p>
-    <h2 class="section-title fade-in">出店実績</h2>
-    <p class="section-sub fade-in">これまでのイベント・マルシェへの出店実績です</p>
-    <p class="fade-in" style="text-align:center;margin-bottom:40px;font-size:1.1rem;font-weight:700;color:var(--brown);">
-      累計売上本数<span style="color:#E02020;font-size:2.2rem;font-weight:900;margin:0 4px;">約13,000本</span>！<br>
-      <small style="font-size:.8rem;font-weight:400;color:var(--gray);">※2024年5月〜2026年3月までのイベント及び通常出店時の実績</small>
-    </p>
-    <div class="achievement-grid" id="achievement-grid"></div>
-  </div>
-</section>
-
 <!-- ========== こだわり・ストーリー ========== -->
 <section class="section story-section" id="story">
   <div class="section-inner">
@@ -1139,29 +1071,7 @@
 </footer>
 
 <script src="js/schedule.js"></script>
-<script src="js/achievements.js"></script>
 <script>
-  // 出店実績自動生成
-  const achievementGrid = document.getElementById('achievement-grid');
-  ACHIEVEMENTS.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'achievement-card fade-in';
-    card.innerHTML = `
-      <div class="achievement-name">${item.name}</div>
-      <div class="achievement-info">
-        <div class="achievement-row">
-          <span class="achievement-row-label">場所</span>
-          <span class="achievement-row-val">${item.place}</span>
-        </div>
-        <div class="achievement-row">
-          <span class="achievement-row-label">開催日</span>
-          <span class="achievement-row-val">${item.date}</span>
-        </div>
-      </div>
-    `;
-    achievementGrid.appendChild(card);
-  });
-
   // 出店スケジュール自動生成
   const tbody = document.getElementById('schedule-body');
   SCHEDULE.forEach(item => {
