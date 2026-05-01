@@ -14,33 +14,63 @@
  */
 const SCHEDULE = [
   {
-    date: "4月4日（土）",
-    place: "ぎょうだはるまつり 2026（行田市）",
+    date: "5月2日（土）",
+    place: "大崎公園",
     time: "10:00 〜 16:00",
-    isEvent: true
+    isEvent: false
   },
   {
-    date: "4月5日（日）",
-    place: "第45回せいせき桜まつり（多摩市）",
-    time: "10:00 〜 17:00",
-    isEvent: true
+    date: "5月3日（日）",
+    place: "モラージュ菖蒲",
+    time: "11:00 〜 17:00",
+    isEvent: false
   },
   {
-    date: "4月18日（土）",
-    place: "第35回白幡ハナミズキ祭（さいたま市南区）",
+    date: "5月5日（火）",
+    place: "膝子こいのぼり祭（さいたま市見沼区）",
     time: "10:00 〜 14:00",
     isEvent: true
   },
   {
-    date: "4月19日（日）",
-    place: "ハッピーふれあいマルシェ（越谷市）",
+    date: "5月9日（土）",
+    place: "こつなマルシェ（春日部夢の森公園）",
+    time: "10:00 〜 15:00",
+    isEvent: true
+  },
+  {
+    date: "5月10日（日）",
+    place: "こつなマルシェ（予備日）",
+    time: "10:00 〜 15:00",
+    isEvent: true
+  },
+  {
+    date: "5月16日（土）",
+    place: "WATSUストリートマルシェ（岩槻駅周辺）",
+    time: "11:00 〜 16:00",
+    isEvent: true
+  },
+  {
+    date: "5月17日（日）",
+    place: "たかもとヘルスパーク（越谷市）",
+    time: "10:00 〜 16:00",
+    isEvent: false
+  },
+  {
+    date: "5月23日（土）",
+    place: "たかもとヘルスパーク（越谷市）",
+    time: "10:00 〜 16:00",
+    isEvent: false
+  },
+  {
+    date: "5月24日（日）",
+    place: "むさしフェス2026（さいたま市南区）",
     time: "10:00 〜 16:00",
     isEvent: true
   },
   {
-    date: "4月25日（土）",
-    place: "大崎公園（さいたま市緑区）",
-    time: "10:00 〜 16:00",
-    isEvent: false
+    date: "5月31日（日）",
+    place: "アニメプロジェクトin大泉（東京都練馬区）",
+    time: "10:00 〜 16:30",
+    isEvent: true
   }
 ];
