@@ -951,8 +951,8 @@
       <p class="section-label fade-in">TRACK RECORD</p>
       <h2 class="section-title fade-in">累計売上実績</h2>
       <p class="fade-in" style="text-align:center;font-size:1.1rem;font-weight:700;color:var(--brown);">
-        累計売上本数<span style="color:#E02020;font-size:2.2rem;font-weight:900;margin:0 4px;">約14,000本</span>！<br>
-        <small style="font-size:.8rem;font-weight:400;color:var(--gray);">※2024年5月〜2026年4月までのイベント及び通常出店時の実績</small>
+        累計売上本数<span style="color:#E02020;font-size:2.2rem;font-weight:900;margin:0 4px;">約13,000本</span>！<br>
+        <small style="font-size:.8rem;font-weight:400;color:var(--gray);">※2024年5月〜2026年3月までのイベント及び通常出店時の実績</small>
       </p>
     </div>
   </div>
@@ -1080,18 +1080,35 @@
 
 <script src="js/schedule.js"></script>
 <script>
-  // 出店スケジュール自動生成
+  // 出店スケジュール自動生成（過去日付は非表示）
   const tbody = document.getElementById('schedule-body');
-  SCHEDULE.forEach(item => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><span class="schedule-date">${item.date}</span></td>
-      <td><span class="schedule-place">${item.place}</span></td>
-      <td><span class="schedule-time">${item.time}</span></td>
-      <td>${item.isEvent ? '<span class="tag-event">イベント</span>' : ''}</td>
-    `;
-    tbody.appendChild(tr);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const upcoming = SCHEDULE.filter(item => {
+    const m = item.date.match(/(\d+)月(\d+)日/);
+    if (!m) return true;
+    const year = item.year || new Date().getFullYear();
+    const d = new Date(year, parseInt(m[1]) - 1, parseInt(m[2]));
+    return d >= today;
   });
+
+  if (upcoming.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="4" style="text-align:center;padding:32px;color:var(--gray);font-size:.95rem;">近日中の出店予定はありません。<br><a href="https://www.instagram.com/hoshino_churros/" target="_blank" rel="noopener" style="color:var(--gold-d);font-weight:700;">Instagram</a> で最新情報をご確認ください。</td>`;
+    tbody.appendChild(tr);
+  } else {
+    upcoming.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><span class="schedule-date">${item.date}</span></td>
+        <td><span class="schedule-place">${item.place}</span></td>
+        <td><span class="schedule-time">${item.time}</span></td>
+        <td>${item.isEvent ? '<span class="tag-event">イベント</span>' : ''}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
 
   // ヒーロー背景スライドショー
   let heroBgIdx = 0;
