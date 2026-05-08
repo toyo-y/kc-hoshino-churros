@@ -68,12 +68,6 @@ const ACHIEVEMENTS = [
     sold: "192本"
   },
   {
-    name: "ふれあいマルシェ",
-    place: "越谷市",
-    date: "2025年5月",
-    sold: "192本"
-  },
-  {
     name: "浦和区民まつり",
     place: "さいたま市浦和区",
     date: "2025年11月",

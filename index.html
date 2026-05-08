@@ -1105,8 +1105,15 @@
   const upcoming = SCHEDULE.filter(item => {
     const m = item.date.match(/(\d+)月(\d+)日/);
     if (!m) return true;
-    const year = item.year || new Date().getFullYear();
-    const d = new Date(year, parseInt(m[1]) - 1, parseInt(m[2]));
+    const month = parseInt(m[1]);
+    const day = parseInt(m[2]);
+    let year = item.year || today.getFullYear();
+    const d = new Date(year, month - 1, day);
+    // 年指定なしで6ヶ月以上前になる場合は翌年扱い（年またぎ対応）
+    if (!item.year && d < today && (today - d) > 180 * 24 * 60 * 60 * 1000) {
+      year += 1;
+      return new Date(year, month - 1, day) >= today;
+    }
     return d >= today;
   });
 
